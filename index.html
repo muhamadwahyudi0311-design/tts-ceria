@@ -21,7 +21,7 @@
 <body class="theme-cheerful">
 
   <!-- APP NAVBAR -->
-  <header class="app-header">
+  <header class="app-header no-print">
     <div class="header-container">
       <div class="logo">
         <span class="logo-icon">🧩</span>
@@ -39,6 +39,9 @@
         <button class="nav-btn" data-tab="play">
           <i class="fa-solid fa-gamepad"></i> 2. Main Interaktif
         </button>
+        <button class="nav-btn" data-tab="print">
+          <i class="fa-solid fa-print"></i> 3. Cetak / Simpan PDF
+        </button>
       </nav>
     </div>
   </header>
@@ -47,7 +50,7 @@
   <main class="app-main">
 
     <!-- ================= TAB 1: EDITOR / GENERATOR ================= -->
-    <section id="tab-editor" class="tab-content active">
+    <section id="tab-editor" class="tab-content active no-print">
       <div class="editor-layout">
         
         <!-- Left Panel: Form & Presets -->
@@ -174,7 +177,7 @@
     </section>
 
     <!-- ================= TAB 2: PLAY INTERACTIVE MODE ================= -->
-    <section id="tab-play" class="tab-content">
+    <section id="tab-play" class="tab-content no-print">
       <div class="play-layout">
         
         <!-- Controls Header -->
@@ -274,6 +277,71 @@
         </div>
 
       </div>
+    </section>
+
+    <!-- ================= TAB 3: PRINTABLE WORKSHEET & PDF EXPORT ================= -->
+    <section id="tab-print" class="tab-content">
+      
+      <!-- Print Actions Bar (Hidden on print output) -->
+      <div class="card print-controls-bar no-print">
+        <div class="print-controls-left">
+          <h3><i class="fa-solid fa-file-pdf icon-purple"></i> Cetak / Simpan Lembar Kerja PDF</h3>
+          <p>Tata letak rapi A4/HVS untuk dijual sebagai digital product atau dicetak untuk siswa/anak.</p>
+        </div>
+        <div class="print-controls-right">
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-answer-key">
+            <span class="slider"></span>
+            <span class="toggle-label">Tampilkan Kunci Jawaban</span>
+          </label>
+          <button id="btn-trigger-print" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-file-pdf"></i> Cetak / Simpan PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Sheet Box -->
+      <div class="printable-sheet" id="printable-sheet">
+        
+        <!-- Sheet Header -->
+        <div class="sheet-header">
+          <div class="sheet-title-box">
+            <h1 id="print-sheet-title">TTS BUAH-BUAHAN</h1>
+            <p class="sheet-subtitle">Lembar Kerja Teka-Teki Silang Anak</p>
+          </div>
+          <div class="sheet-meta-box">
+            <div class="meta-line"><span>Nama:</span> <span class="meta-underline"></span></div>
+            <div class="meta-line"><span>Kelas:</span> <span class="meta-underline"></span></div>
+            <div class="meta-line"><span>Tanggal:</span> <span class="meta-underline"></span></div>
+            <div class="meta-line"><span>Nilai:</span> <span class="meta-score-box"></span></div>
+          </div>
+        </div>
+
+        <hr class="sheet-divider">
+
+        <!-- Sheet Grid -->
+        <div class="sheet-grid-wrapper">
+          <div id="print-grid-container" class="crossword-grid print-mode"></div>
+        </div>
+
+        <!-- Sheet Clues -->
+        <div class="sheet-clues-wrapper">
+          <div class="sheet-clue-column">
+            <h3 class="sheet-clue-heading">➡️ MENDATAR</h3>
+            <ol id="print-across-clues" class="sheet-clue-list"></ol>
+          </div>
+          <div class="sheet-clue-column">
+            <h3 class="sheet-clue-heading">⬇️ MENURUN</h3>
+            <ol id="print-down-clues" class="sheet-clue-list"></ol>
+          </div>
+        </div>
+
+        <div class="sheet-footer">
+          <p>Dibuat dengan 🧩 <strong>TTS Ceria</strong> — Belajar & Bermain Teka-Teki Silang Anak</p>
+        </div>
+
+      </div>
+
     </section>
 
   </main>

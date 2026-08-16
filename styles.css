@@ -677,54 +677,258 @@ body {
   color: #c92a2a;
 }
 
-/* RESPONSIVE MEDIA QUERIES FOR MOBILE SMARTPHONES */
-@media (max-width: 768px) {
-  .header-container {
-    padding: 8px 12px;
+/* TAB 3: PRINTABLE SHEET & PDF EXPORT STYLES */
+.print-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.print-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  user-select: none;
+}
+
+.toggle-switch input { display: none; }
+
+.slider {
+  width: 46px;
+  height: 24px;
+  background-color: #cbd5e1;
+  border-radius: 20px;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: white;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch input:checked + .slider {
+  background-color: var(--accent-green);
+}
+
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+/* Sheet A4 Box styling */
+.printable-sheet {
+  background: #ffffff;
+  color: #000000;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid #ccc;
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.sheet-title-box h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #1e293b;
+}
+
+.sheet-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.sheet-meta-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 240px;
+}
+
+.meta-line {
+  display: flex;
+  align-items: flex-end;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.meta-underline {
+  flex: 1;
+  border-bottom: 1.5px solid #000;
+  margin-left: 6px;
+}
+
+.meta-score-box {
+  width: 40px;
+  height: 35px;
+  border: 2px solid #000;
+  margin-left: 6px;
+  border-radius: 4px;
+}
+
+.sheet-divider {
+  border: none;
+  border-top: 2px dashed #000;
+  margin: 20px 0;
+}
+
+.sheet-grid-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+/* PRINT MODE GRID - CLEAR CONTRAST FOR LETTER CELLS VS SPARE/EMPTY CELLS */
+.crossword-grid.print-mode {
+  background-color: #0f172a; /* Dark border lines */
+  padding: 2px;
+  gap: 2px;
+  border-radius: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.crossword-grid.print-mode .cell {
+  background-color: #ffffff !important; /* Active letter cell is crisp white */
+  border: 1px solid #0f172a !important;
+  color: #000000;
+  font-size: 1.2rem;
+  width: 34px;
+  height: 34px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Spare / Empty Grid Cells in Print Mode - Distinct Shaded Slate Gray */
+.crossword-grid.print-mode .cell.empty {
+  background-color: #cbd5e1 !important; /* Soft Slate Gray fill for empty/spare cells */
+  border-color: #94a3b8 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.crossword-grid.print-mode .cell-num {
+  color: #000000;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.sheet-clues-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 24px;
+}
+
+.sheet-clue-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  border-bottom: 1.5px solid #000;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.sheet-clue-list {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.sheet-clue-list li {
+  margin-bottom: 6px;
+}
+
+.sheet-footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 12px;
+}
+
+/* PRINT MEDIA QUERY FOR A4 PDF EXPORT */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
   }
 
-  .logo-text h1 { font-size: 1.3rem; }
-  .logo-text p { font-size: 0.75rem; }
-
-  .nav-btn {
-    font-size: 0.85rem;
-    padding: 6px 10px;
+  .no-print {
+    display: none !important;
   }
 
   .app-main {
-    padding: 10px;
+    padding: 0 !important;
+    max-width: 100% !important;
   }
 
-  .card {
-    padding: 12px;
-    border-radius: var(--radius-sm);
+  .printable-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
   }
 
-  .play-bar {
-    flex-direction: column;
-    align-items: flex-start;
+  .crossword-grid.print-mode {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
+  .crossword-grid.print-mode .cell.empty {
+    background-color: #cbd5e1 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* RESPONSIVE MEDIA QUERIES FOR MOBILE SMARTPHONES */
+@media (max-width: 768px) {
+  .header-container { padding: 8px 12px; }
+  .logo-text h1 { font-size: 1.3rem; }
+  .logo-text p { font-size: 0.75rem; }
+
+  .nav-btn { font-size: 0.85rem; padding: 6px 10px; }
+  .app-main { padding: 10px; }
+  .card { padding: 12px; border-radius: var(--radius-sm); }
+
+  .play-bar { flex-direction: column; align-items: flex-start; }
   .play-actions {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6px;
   }
+  .play-actions .btn { font-size: 0.85rem; padding: 8px; }
 
-  .play-actions .btn {
-    font-size: 0.85rem;
-    padding: 8px;
-  }
-
-  .active-clue-banner {
-    top: 52px;
-    padding: 8px 10px;
-  }
-
-  .clue-text {
-    font-size: 0.85rem;
-  }
+  .active-clue-banner { top: 52px; padding: 8px 10px; }
+  .clue-text { font-size: 0.85rem; }
 }
 
 /* VICTORY MODAL */

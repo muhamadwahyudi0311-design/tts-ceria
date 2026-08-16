@@ -398,6 +398,7 @@ const App = {
       const val = e.target.value || "Teka Teki Silang";
       document.getElementById('preview-title-display').textContent = val;
       document.getElementById('play-title').textContent = val;
+      document.getElementById('print-sheet-title').textContent = val.toUpperCase();
     });
 
     // Add Word Form
@@ -430,9 +431,23 @@ const App = {
     document.getElementById('btn-close-victory').addEventListener('click', () => {
       document.getElementById('victory-modal').classList.remove('active');
     });
+
+    // Print & PDF Export Controls
+    const toggleAnswerKey = document.getElementById('toggle-answer-key');
+    if (toggleAnswerKey) {
+      toggleAnswerKey.addEventListener('change', (e) => {
+        this.renderPrintGrid(e.target.checked);
+      });
+    }
+
+    const btnTriggerPrint = document.getElementById('btn-trigger-print');
+    if (btnTriggerPrint) {
+      btnTriggerPrint.addEventListener('click', () => {
+        window.print();
+      });
+    }
   },
 
-  // BIND VIRTUAL TOUCH KEYPAD FOR MOBILE / TOUCH SCREENS
   bindVirtualKeypad() {
     const keypad = document.getElementById('virtual-keypad');
     if (!keypad) return;
@@ -444,9 +459,7 @@ const App = {
       const keyVal = keyBtn.dataset.key;
       if (!keyVal) return;
 
-      // Handle Keypad Press
       if (!this.activeCellCoord) {
-        // Default to first available clue cell if none selected
         if (this.puzzleResult && this.puzzleResult.acrossClues.length > 0) {
           const first = this.puzzleResult.acrossClues[0];
           this.selectClue(first, 'across');
@@ -458,7 +471,6 @@ const App = {
       const { r, c } = this.activeCellCoord;
 
       if (/^[A-Z]$/.test(keyVal)) {
-        // Letter Pressed
         const input = document.querySelector(`.cell-input[data-r="${r}"][data-c="${c}"]`);
         if (input) input.value = keyVal;
         this.userInputs[`${r},${c}`] = keyVal;
@@ -493,6 +505,9 @@ const App = {
 
     if (tabId === 'play') {
       this.initPlayMode();
+    } else if (tabId === 'print') {
+      const showAnswerKey = document.getElementById('toggle-answer-key')?.checked || false;
+      this.renderPrintGrid(showAnswerKey);
     }
   },
 
@@ -503,6 +518,9 @@ const App = {
     document.getElementById('puzzle-title').value = preset.title;
     document.getElementById('preview-title-display').textContent = preset.title;
     document.getElementById('play-title').textContent = preset.title;
+
+    const printTitle = document.getElementById('print-sheet-title');
+    if (printTitle) printTitle.textContent = preset.title.toUpperCase();
 
     this.currentWords = preset.words.map(w => ({ ...w }));
     this.updateWordList();
@@ -672,9 +690,8 @@ const App = {
           input.dataset.c = c;
           input.value = this.userInputs[`${r},${c}`] || '';
           input.autocomplete = 'off';
-          input.setAttribute('inputmode', 'none'); // Prevent mobile native keyboard overlap, rely on virtual keypad
+          input.setAttribute('inputmode', 'none');
 
-          // Handlers
           input.addEventListener('focus', (e) => {
             this.handleCellFocus(r, c);
             e.target.select();
@@ -980,6 +997,61 @@ const App = {
     const timerDisplay = document.getElementById('play-timer').textContent;
     document.getElementById('v-time').textContent = timerDisplay;
     document.getElementById('victory-modal').classList.add('active');
+  },
+
+  // --- PRINTABLE WORKSHEET & PDF RENDER ---
+  renderPrintGrid(showAnswerKey) {
+    if (!this.puzzleResult || this.puzzleResult.rows === 0) return;
+
+    const { grid, rows, cols, acrossClues, downClues } = this.puzzleResult;
+    const printGridContainer = document.getElementById('print-grid-container');
+
+    if (!printGridContainer) return;
+
+    printGridContainer.innerHTML = '';
+    printGridContainer.style.gridTemplateColumns = `repeat(${cols}, 34px)`;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const cellData = grid[`${r},${c}`];
+        const cellDiv = document.createElement('div');
+        cellDiv.className = 'cell' + (cellData ? '' : ' empty');
+
+        if (cellData) {
+          if (cellData.number) {
+            const numSpan = document.createElement('span');
+            numSpan.className = 'cell-num';
+            numSpan.textContent = cellData.number;
+            cellDiv.appendChild(numSpan);
+          }
+
+          if (showAnswerKey) {
+            cellDiv.appendChild(document.createTextNode(cellData.letter));
+          }
+        }
+
+        printGridContainer.appendChild(cellDiv);
+      }
+    }
+
+    const acrossOl = document.getElementById('print-across-clues');
+    const downOl = document.getElementById('print-down-clues');
+    if (acrossOl && downOl) {
+      acrossOl.innerHTML = '';
+      downOl.innerHTML = '';
+
+      acrossClues.forEach(c => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${c.number}.</strong> ${c.clue}`;
+        acrossOl.appendChild(li);
+      });
+
+      downClues.forEach(c => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${c.number}.</strong> ${c.clue}`;
+        downOl.appendChild(li);
+      });
+    }
   }
 };
 
