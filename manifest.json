@@ -1,11 +1,11 @@
 {
-    "name": "tts_studio",
-    "short_name": "tts_studio",
+    "name": "Bikin TTS",
+    "short_name": "Bikin TTS",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#2B80BE",
+    "theme_color": "#2B80BE",
+    "description": "Bikin TTS - Buat dan Mainkan Teka-Teki Silang",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
@@ -33,3 +33,4 @@
         }
     ]
 }
+
